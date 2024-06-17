@@ -18,3 +18,6 @@ module "vpn" {
     }
   )
   }
+
+  # vpn username:openvpn
+  # ssh vpn openvpn@<ip>

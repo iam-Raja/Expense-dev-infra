@@ -4,6 +4,7 @@ resource "aws_lb" "my-alb" {
   load_balancer_type = "application"
   security_groups    = [data.aws_ssm_parameter.sg_id_vpn.value]
   subnets            = split(",", data.aws_ssm_parameter.subnet_private.value)
+  enable_deletion_protection = false
 
   tags =merge (
     var.common_tags,{
