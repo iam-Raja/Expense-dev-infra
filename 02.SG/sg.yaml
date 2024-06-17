@@ -1,0 +1,72 @@
+SG:
+ - frontend
+ - backend
+ - db
+ - bastion
+ - VPN
+ - private_alb
+# db is manged by aws so it won't allow ssh, if we need to config then directly from ui only 
+db: 
+ - name : db_backend
+   desc: db accepting traffic from backend
+   port: 3306
+   source: backend
+ - name : db_bastion
+   desc: db accepting traffic from backend
+   port: 3306
+   source: bastion
+ - name : db_vpn
+   desc : db accepting traffic from vpn
+   port : 3306
+   source : vpn 
+
+backend:
+ - name : backend_bastion
+   desc: backend accepting traffic from bastion
+   port: 22
+   source: bastion 
+ - name : backend_vpn #for http
+   desc : backend accepting traffic from vpn
+   port : 8080
+   source : vpn 
+ - name : vpn_ssh #to ssh
+   desc : backend accepting traffic from vpn
+   port : 22
+   source : vpn
+ - name : private-alb
+   desc : backend accepting traffic from private-alb
+   port : 22
+   source : private-alb  
+frontend:
+ - name : frontend_public
+   desc: frontend accepting traffic from public
+   port: 80
+   source: public   
+bastion:
+ - name : bastion_public
+   desc: bastion accepting traffic from public
+   port: 22
+   source: public
+
+vpn :
+ - name : vpn_public
+   desc : vpn accepting traffic from public
+   port : 22, 943, 443, 1194 
+   source: public
+
+private-alb :
+ - name: private-alb_frontend
+   desc : private-alb accepting traffic from frontend 
+   port : 80
+   source : frontend
+ - name: private-alb_vpn
+   desc : private-alb accepting traffic from vpn
+   port : 80
+   source : vpn  
+
+
+    
+
+
+
+ 
