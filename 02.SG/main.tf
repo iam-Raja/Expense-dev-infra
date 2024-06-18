@@ -49,6 +49,16 @@ module "private_alb"{
     common_tags=var.common_tags
 }
 
+module "public_alb"{
+    source="git::https://github.com/iam-Raja/terraform-module-SG-Source.git?ref=main"
+    project_name=var.project_name
+    environment = var.environment
+    sg_name="public_alb"
+    sg_description="sg is for public_alb"
+    vpc_id=data.aws_ssm_parameter.vpc_id.value
+    common_tags=var.common_tags
+}
+
 module "vpn"{
     source="git::https://github.com/iam-Raja/terraform-module-SG-Source.git?ref=main"
     project_name=var.project_name
@@ -175,6 +185,15 @@ resource "aws_security_group_rule" "private_alb_bastion" {
   protocol          = "tcp"
   security_group_id = module.private_alb.sg_id #to sg we were creating this rule
   source_security_group_id = module.bastion.sg_id
+}
+
+resource "aws_security_group_rule" "public_alb_public" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  security_group_id = module.public_alb.id #to sg we were creating this rule
+  cidr_blocks=["0.0.0.0/0"] ##from where traffic is coming
 }
 
 

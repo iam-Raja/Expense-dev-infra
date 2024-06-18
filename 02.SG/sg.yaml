@@ -5,6 +5,7 @@ SG:
  - bastion
  - VPN
  - private_alb
+ - public_alb
 # db is manged by aws so it won't allow ssh, if we need to config then directly from ui only 
 db: 
  - name : db_backend

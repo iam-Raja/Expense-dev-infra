@@ -34,3 +34,9 @@ resource "aws_ssm_parameter" "SG_ID_PRIVATE-ALB" {
   type  = "String"
   value = module.private_alb.sg_id
 }
+
+resource "aws_ssm_parameter" "SG_ID_PUBLIC-ALB" {
+  name  = "/${var.project_name}/${var.environment}/SG_ID_PUBLIC-ALB"
+  type  = "String"
+  value = module.public_alb.sg_id
+}
