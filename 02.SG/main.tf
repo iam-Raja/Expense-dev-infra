@@ -158,7 +158,7 @@ resource "aws_security_group_rule" "private_alb_vpn" {
   to_port           = 80
   protocol          = "tcp"
   security_group_id = module.private_alb.sg_id #to sg we were creating this rule
-  source_security_group_id = module.vpn.sg_id
+  source_security_group_id = module.vpn.sg_id # source is where you are getting traffic from
 }
 resource "aws_security_group_rule" "private_alb_frontend" {
   type              = "ingress"

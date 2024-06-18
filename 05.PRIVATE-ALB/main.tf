@@ -2,7 +2,7 @@ resource "aws_lb" "my-alb" {
   name               = "${var.project_name}-${var.environment}-private-alb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [data.aws_ssm_parameter.sg_id_vpn.value]
+  security_groups    = [data.aws_ssm_parameter.sg_id_private_alb.value]
   subnets            = split(",", data.aws_ssm_parameter.subnet_private.value)
   enable_deletion_protection = false
 
