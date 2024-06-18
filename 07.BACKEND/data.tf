@@ -6,6 +6,13 @@ data "aws_ssm_parameter" "sg_id_backend" {
   name = "/${var.project_name}/${var.environment}/SG_ID_BACKEND"
 }
 
+data "aws_ssm_parameter" "vpc_id" {
+  name = "/${var.project_name}/${var.environment}/VPC_ID"
+}
+data "aws_ssm_parameter" "alb_listner" {
+  name = "/${var.project_name}/${var.environment}/private_alb_listner_arn"
+}
+
 data "aws_ami" "ami_info" {
   most_recent      = true
   owners           = ["973714476881"]
