@@ -6,7 +6,7 @@ module "frontend" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [data.aws_ssm_parameter.sg_id_frontend.value] # sg_id
   ami = data.aws_ami.ami_info.id
-  subnet_id              = local.subnet_public.id #subnet id(pub,priv,db)
+  subnet_id              = local.subnet_public #subnet id(pub,priv,db)
   user_data = file("frontend.sh")
   tags = merge (
     var.common_tags,{
