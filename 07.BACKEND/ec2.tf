@@ -28,7 +28,7 @@ resource "null_resource" "backend" {
     host=module.backend.private_ip
   }
 
-     provisioner "file" {
+    provisioner "file" {
         source      = "${var.common_tags.component}.sh"
         destination = "/tmp/${var.common_tags.component}.sh"
     }

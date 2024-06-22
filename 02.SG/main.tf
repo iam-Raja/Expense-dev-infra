@@ -71,19 +71,35 @@ module "vpn"{
 }
 
 
-# frontend sg is accepting traffic from internet
+# frontend sg is accepting traffic from 
 
-resource "aws_security_group_rule" "frontend_internet" {
+resource "aws_security_group_rule" "frontend_public_alb" {
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
   security_group_id = module.frontend.sg_id #to sg we were creating this rule
-  cidr_blocks=["0.0.0.0/0"] ##from where traffic is coming
+  source_security_group_id=module.public_alb.sg_id ##from where traffic is coming
+}
+resource "aws_security_group_rule" "frontend_vpn" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = module.frontend.sg_id #to sg we were creating this rule
+  source_security_group_id=module.vpn.sg_id ##from where traffic is coming
+}
+resource "aws_security_group_rule" "frontend_bastion" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = module.frontend.sg_id #to sg we were creating this rule
+  source_security_group_id=module.bastion.sg_id ##from where traffic is coming
 }
 
 
-# backend sg is accepting from instnce which are connected to frontend sg
+# backend sg is accepting traffic from 
 resource "aws_security_group_rule" "backend_vpn_ssh" {
   type              = "ingress"
   from_port         = 22
@@ -122,7 +138,7 @@ resource "aws_security_group_rule" "backend_bastion" {
 
 
 
-# db sg is accepting trafic from from instnce which are connected to backend sg
+# db sg is accepting trafic from 
 resource "aws_security_group_rule" "db_backend" {
   type              = "ingress"
   from_port         = 3306
@@ -187,12 +203,14 @@ resource "aws_security_group_rule" "private_alb_bastion" {
   source_security_group_id = module.bastion.sg_id
 }
 
+## public_alb accepting traffic from 
+
 resource "aws_security_group_rule" "public_alb_public_http" {
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  security_group_id = module.public_alb.id #to sg we were creating this rule
+  security_group_id = module.public_alb.sg_id #to sg we were creating this rule
   cidr_blocks=["0.0.0.0/0"] ##from where traffic is coming
 }
 
@@ -201,9 +219,11 @@ resource "aws_security_group_rule" "public_alb_public_https" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  security_group_id = module.public_alb.id #to sg we were creating this rule
+  security_group_id = module.public_alb.sg_id #to sg we were creating this rule
   cidr_blocks=["0.0.0.0/0"] ##from where traffic is coming
 }
+
+
 
 
 
