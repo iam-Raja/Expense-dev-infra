@@ -31,6 +31,22 @@ resource "aws_lb_listener" "hhtp_listner" {
   }
 }
 
+resource "aws_lb_listener" "https_listner" {
+  load_balancer_arn = aws_lb.my-alb-pub.arn
+  port              = "443"
+  protocol          = "HTTPS"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<h1>Fixed response content From Public ALB HTTPS </h1>"
+      status_code  = "200"
+    }
+  }
+}
+
 #R53 record for alb name
 module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
